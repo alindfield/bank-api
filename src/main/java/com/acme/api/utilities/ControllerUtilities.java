@@ -4,12 +4,16 @@ import javax.persistence.PersistenceException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 
+import com.acme.api.data.Account;
 import com.acme.api.exception.BusinessException;
+import com.acme.api.request.repository.AccountRepository;
 import com.acme.api.response.Response;
 
 public class ControllerUtilities {
@@ -28,7 +32,7 @@ public class ControllerUtilities {
 		Response<E> response = new Response<>();	
 		
 		if (result != null && result.hasErrors()) {
-			result.getAllErrors().stream().forEach((oe) -> {response.getErrors().add(oe.getDefaultMessage());});
+			result.getAllErrors().stream().forEach(oe -> {response.getErrors().add(oe.getDefaultMessage());});
 			response.setSuccess(false);
 			status = HttpStatus.BAD_REQUEST;
 			return ResponseEntity.status(status).body(response);
@@ -56,5 +60,5 @@ public class ControllerUtilities {
 		
 		return ResponseEntity.status(status).body(response);	
 	}
-	
+		
 }
