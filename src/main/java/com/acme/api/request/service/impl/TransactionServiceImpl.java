@@ -56,14 +56,19 @@ public class TransactionServiceImpl implements TransactionService {
 		return transactionType;
 	}
 	
+	private TransactionDTO createTransaction(Transaction input) {
+		Transaction output = transactionRepository.saveAndFlush(input);
+		LOGGER.info("Created Transaction Id {} Account Id {} Amount {} Date {}", output.getId(), output.getAccountId(), output.getAmount(), output.getTransactionDate());
+		return TransactionDTO.convertFrom(output);
+	}
+	
 	@Override
 	public TransactionDTO deposit(DepositRequest deposit) {
 		Account account = accountService.findAccount(deposit.getSortCode(), deposit.getAccountNo());
 		TransactionType transactionType = findTransactionType(deposit.getTransactionCode());
 		if (transactionType.getDebitCredit() != DebitCredit.Credit) throw new BusinessException("Transaction type must be credit");
 		Transaction input = convertToTransaction(account.getId(), transactionType.getId(), deposit.getAmount());
-		Transaction output = transactionRepository.saveAndFlush(input);
-		return TransactionDTO.convertFrom(output);
+		return createTransaction(input);
 	}
 
 	@Override
@@ -72,8 +77,7 @@ public class TransactionServiceImpl implements TransactionService {
 		TransactionType transactionType = findTransactionType(withdrawal.getTransactionCode());
 		if (transactionType.getDebitCredit() != DebitCredit.Debit) throw new BusinessException("Transaction type must be debit");
 		Transaction input = convertToTransaction(account.getId(), transactionType.getId(), withdrawal.getAmount());
-		Transaction output = transactionRepository.saveAndFlush(input);
-		return TransactionDTO.convertFrom(output);
+		return createTransaction(input);
 	}
 
 }
