@@ -76,7 +76,7 @@ public class TransactionServiceImpl implements TransactionService {
 		Account account = accountService.findAccount(withdrawal.getSortCode(), withdrawal.getAccountNo());
 		TransactionType transactionType = findTransactionType(withdrawal.getTransactionCode());
 		if (transactionType.getDebitCredit() != DebitCredit.Debit) throw new BusinessException("Transaction type must be debit");
-		Transaction input = convertToTransaction(account.getId(), transactionType.getId(), withdrawal.getAmount());
+		Transaction input = convertToTransaction(account.getId(), transactionType.getId(), withdrawal.getAmount() * -1);
 		return createTransaction(input);
 	}
 
