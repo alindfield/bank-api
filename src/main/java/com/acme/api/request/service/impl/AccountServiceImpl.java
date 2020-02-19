@@ -55,13 +55,6 @@ public class AccountServiceImpl implements AccountService {
 		LOGGER.info("latest {}", latest);
 		BalanceDTO balanceDTO = new BalanceDTO();
 		balanceDTO.setBalance(running);
-		if (balance == null) {
-			balance = new Balance();
-			balance.setAccountId(account.getId());
-		}
-		balance.setBalanceDate(latest);
-		balance.setAmount(running);
-		balanceRepository.saveAndFlush(balance);
 		return balanceDTO;
 	}
 

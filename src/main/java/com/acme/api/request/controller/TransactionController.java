@@ -41,4 +41,5 @@ public class TransactionController {
 	public ResponseEntity<Response<TransactionDTO>> withdrawal(@Valid @RequestBody WithdrawalRequest withdrawal, BindingResult result) {
 		return ControllerUtilities.call(() -> transactionService.withdrawal(withdrawal), result) ;
 	}
+	
 }
