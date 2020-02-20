@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.acme.api.data.Account;
 import com.acme.api.data.Balance;
@@ -21,6 +22,7 @@ import com.acme.api.request.repository.TransactionRepository;
 import com.acme.api.request.service.AccountService;
 
 @Component
+@Transactional
 public class AccountServiceImpl implements AccountService {
 
 	private static Logger LOGGER = LoggerFactory.getLogger(AccountServiceImpl.class);
@@ -47,12 +49,9 @@ public class AccountServiceImpl implements AccountService {
 		List<Transaction> transactions = transactionRepository.findAllByAccountIdAndTransactionDateGreaterThan(account.getId(), fromDate, Sort.by(Sort.Direction.ASC, "transactionDate"));
 		LOGGER.info("{}", transactions.size());
 		Double running = balance == null ? 0D : balance.getAmount();
-		Date latest = fromDate;
 		for (Transaction t : transactions) {
 			running += t.getAmount();
-			if (t.getTransactionDate().compareTo(latest) > 0) latest = t.getTransactionDate();
 		}
-		LOGGER.info("latest {}", latest);
 		BalanceDTO balanceDTO = new BalanceDTO();
 		balanceDTO.setBalance(running);
 		return balanceDTO;
