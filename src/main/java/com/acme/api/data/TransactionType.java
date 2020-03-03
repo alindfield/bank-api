@@ -32,7 +32,7 @@ public class TransactionType {
 		return id;
 	}
 	
-	public void setId(Long id) {
+	void setId(Long id) {
 		this.id = id;
 	}
 	
@@ -40,7 +40,7 @@ public class TransactionType {
 		return code;
 	}
 	
-	public void setCode(String code) {
+	void setCode(String code) {
 		this.code = code;
 	}
 	
@@ -48,7 +48,7 @@ public class TransactionType {
 		return description;
 	}
 	
-	public void setDescription(String description) {
+	void setDescription(String description) {
 		this.description = description;
 	}
 
